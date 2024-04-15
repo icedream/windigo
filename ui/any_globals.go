@@ -145,8 +145,8 @@ func _CalcTextBoundBox(text string, considerAccelerators bool) win.SIZE {
 // Calculates the bound rectangle to fit the text with current system font,
 // including the check box for a checkbox/radio.
 func _CalcTextBoundBoxWithCheck(
-	text string, considerAccelerators bool) win.SIZE {
-
+	text string, considerAccelerators bool,
+) win.SIZE {
 	boundBox := _CalcTextBoundBox(text, considerAccelerators)
 	boundBox.Cx += win.GetSystemMetrics(co.SM_CXMENUCHECK) + // https://stackoverflow.com/a/1165052/6923555
 		win.GetSystemMetrics(co.SM_CXEDGE)
@@ -172,7 +172,9 @@ func _FirstMainStuff() {
 	err := win.GetCurrentProcess().SetUserObjectInformation(
 		co.UOI_TIMERPROC_EXCEPTION_SUPPRESSION, unsafe.Pointer(&bVal), unsafe.Sizeof(bVal))
 	if err != nil {
-		panic(err)
+		// TODO - Wine does not support UOI_TIMERPROC_EXCEPTION_SUPPRESSION at all, ignore for now to make it work there
+		//
+		// See https://github.com/wine-mirror/wine/blob/996070283c88d14b9967399d1fe511196adcfab3/dlls/win32u/winstation.c#L412-L416.
 	}
 }
 
